@@ -2,7 +2,7 @@
 	<head>
 		<title>My first aframe app</title>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-		<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.5.0/annyang.min.js"></script>
+		<script src="annyang.js"></script>
 		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
 		<script src="aframe_speech.js"></script>
 		<script>
@@ -13,9 +13,12 @@
 	</head>
 	<body >
 		<nav class="navbar navbar-default">
-			<ul class="nav navbar-nav">
+
+			<ul style="margin-left:10px;" class="nav navbar-nav">
 				<li><button id="capture" class="btn btn-primary">Demarrer la capture</button></li>
+				<li>&nbsp;&nbsp;&nbsp;</li>
 				<li id="result"></li>
+				<li>&nbsp;&nbsp;&nbsp;</li>
 				<li><button id="stop" class="btn btn-primary">Scanner QR code</button></li>
 			</ul>
 			<div id="easteregg" style="z-index:10;display:none;"><img alt="" src="tinder_2.png"></div>
@@ -120,8 +123,11 @@
 			priv.addClick = function(evt) {
 				priv.click.push(evt.detail.intersection.point);
 				if(priv.click.length == 2) {
-					var check = document.getElementById('result').innerHTML = priv.calc(priv.click[0], priv.click[1])+" cm";
+					var check = priv.calc(priv.click[0], priv.click[1]);
 					if(priv.paramsUrl.largeur !== undefined && priv.paramsUrl.largeur < parseInt(check)) {
+						document.getElementById('result').className = "bg-success";
+						document.getElementById('result').innerHTML = check+" cm : ça passe! ";
+
 						document.getElementById('easteregg').style.display = 'block';
 						setTimeout(function() {
 							document.getElementById('easteregg').style.display = 'none';
@@ -129,9 +135,10 @@
 						priv.createSphere('#00FF00',evt.detail.intersection.point, 2);
 						priv.firstBowl.setAttribute('color', '#00FF00');
 					} else {
+						document.getElementById('result').className = "bg-danger";
+						document.getElementById('result').innerHTML = check+" cm : ça ne passe pas! ";
 						priv.createSphere('#FF0000',evt.detail.intersection.point, 2);
 						priv.firstBowl.setAttribute('color', '#FF0000');
-						alert("ça ne passe pas");
 					}
 					main.aframe.remove();
 				} else {
