@@ -5,6 +5,11 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.5.0/annyang.min.js"></script>
 		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
 		<script src="aframe_speech.js"></script>
+		<script>
+		function test (e) {
+			alert(e);
+		}
+		</script>
 	</head>
 	<body >
 		<nav class="navbar navbar-default">
@@ -42,9 +47,7 @@
 		<script>
 		'use strict';
 
-		function test (e) {
-			alert(e);
-		}
+
 		window.main = {};
 		AFRAME.registerComponent('cursor-listener', {
 		  init: function () {
