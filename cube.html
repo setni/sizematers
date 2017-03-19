@@ -1,0 +1,170 @@
+<html>
+	<head>
+		<title>My first aframe app</title>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+		<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.5.0/annyang.min.js"></script>
+		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+		<script src="aframe_speech.js"></script>
+	</head>
+	<body >
+		<nav class="navbar navbar-default">
+			<ul class="nav navbar-nav">
+				<li><button id="capture" class="btn btn-primary">Demarrer la capture</button></li>
+				<li id="result"></li>
+				<li><button id="stop" class="btn btn-primary">Scanner QR code</button></li>
+			</ul>
+			<div id="easteregg" style="z-index:10;display:none;"><img alt="" src="tinder_2.png"></div>
+		</nav>
+		<div class="container">
+			<a-scene id="main" >
+			<a-assets>
+		           <a-asset-item id="moore-obj" src="20170318_OBJ - Salle 1/2a9bd41bcb044fea843f4d506714db6e/2a9bd41bcb044fea843f4d506714db6e.obj"></a-asset-item>
+				   <a-asset-item id="moore-mtl" src="20170318_OBJ - Salle 1/2a9bd41bcb044fea843f4d506714db6e/2a9bd41bcb044fea843f4d506714db6e.mtl"></a-asset-item>
+			</a-assets>
+				<a-entity  cursor-listener
+
+			          obj-model="obj: #moore-obj; mtl: #moore-mtl"
+			          scale="2 2 2"
+			          rotation="-90 -90 90"
+			          position="0 -1 -5">
+				</a-entity>
+				<a-entity camera id="camera"  look-controls position="0 1.764 0">
+			    	<a-entity id="cursor" cursor="fuse: false; fuseTimeout: 500" position="0 0 -1"
+
+			              geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02;" material="color: #CCC; shader: flat;">
+
+			    	</a-entity>
+			  	</a-entity>
+				<a-entity id="annyang" annyang-speech-recognition></a-entity>
+				<a-entity speech-command__hello="command: hello; type: function; function: test;"></a-entity>
+			</a-scene>
+		</div>
+		<script>
+		'use strict';
+
+		function test (e) {
+			alert(e);
+		}
+		window.main = {};
+		AFRAME.registerComponent('cursor-listener', {
+		  init: function () {
+				main.view = this.el;
+		  }
+		});
+
+		main.capture = function() {
+			var priv = {};
+			priv.click =[];
+			priv.paramsUrl = {};
+			priv.firsBowl = {};
+			priv.secondBowl = {};
+
+			this.constr = function() {
+				var arr = window.location.href.split('?').pop().split('&');
+				var params = {};
+				for (var i = 0; i < arr.length; i++) {
+					var tmparr = arr[i].split('=');
+					params[tmparr[0]] = tmparr[1];
+				}
+				priv.paramsUrl = params;
+
+				document.body.addEventListener('keyup', priv.bindEvent);
+			};
+
+			this.init = function() {
+				priv.click = [];
+				document.getElementById('cursor').setAttribute('material', 'color', '#FF0000');
+				window.main.view.addEventListener('click', priv.addClick, false);
+			};
+
+			this.remove = function () {
+				priv.firstBowl = priv.secondBowl = {};
+				setTimeout(function() {
+					document.getElementById('main').removeChild(document.getElementsByTagName('a-sphere')[0]);
+					document.getElementById('main').removeChild(document.getElementsByTagName('a-sphere')[0]);
+				}, 500);
+
+				document.getElementById('cursor').setAttribute('material', 'color', '#00FF00');
+				window.main.view.removeEventListener('click', priv.addClick, false);
+			};
+
+			priv.bindEvent = function(evt) {
+				var el = document.getElementById('camera').getAttribute('position');
+				var element = document.getElementById('camera');
+				switch(evt.key) {
+					case "z":
+						el.z -= 0.2;
+						element.setAttribute('position', el.x+" "+el.y+" "+el.z);
+						break;
+					case "q":
+						el.x -= 0.2;
+						element.setAttribute('position', el.x+" "+el.y+" "+el.z);
+						break;
+					case "d":
+						el.x += 0.2;
+						element.setAttribute('position', el.x+" "+el.y+" "+el.z);
+						break;
+					case "s":
+						el.z += 0.2;
+						element.setAttribute('position', el.x+" "+el.y+" "+el.z);
+						break;
+					default:
+						break;
+
+				}
+			};
+
+			priv.addClick = function(evt) {
+				priv.click.push(evt.detail.intersection.point);
+				if(priv.click.length == 2) {
+					var check = document.getElementById('result').innerHTML = priv.calc(priv.click[0], priv.click[1])+" cm";
+					if(priv.paramsUrl.largeur !== undefined && priv.paramsUrl.largeur < parseInt(check)) {
+						document.getElementById('easteregg').style.display = 'block';
+						setTimeout(function() {
+							document.getElementById('easteregg').style.display = 'none';
+						}, 2000);
+						priv.createSphere('#00FF00',evt.detail.intersection.point, 2);
+						priv.firstBowl.setAttribute('color', '#00FF00');
+					} else {
+						priv.createSphere('#FF0000',evt.detail.intersection.point, 2);
+						priv.firstBowl.setAttribute('color', '#FF0000');
+						alert("ça ne passe pas");
+					}
+					main.aframe.remove();
+				} else {
+					priv.createSphere('#FFC65D',evt.detail.intersection.point, 1);
+				}
+			};
+
+			priv.createSphere = function(color, el, n) {
+				var cylinder = document.createElement('a-sphere');
+				cylinder.setAttribute('color', color);
+				cylinder.setAttribute('class', "plane");
+				cylinder.setAttribute('position', el.x+" "+el.y+" "+el.z);
+				cylinder.setAttribute('radius' , 0.1);
+				document.getElementById('main').appendChild(cylinder);
+				if(n === 1) priv.firstBowl = cylinder;
+				else priv.secondBowl = cylinder;
+			};
+
+			priv.calc = function(a,b) {
+				return parseFloat((Math.sqrt(
+					Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2) + Math.pow((a.z - b.z), 2)
+				) / 2)*0.95*100).toFixed(2);
+			}
+		}
+
+		main.aframe = new main.capture();
+		main.aframe.constr();
+
+		document.getElementById('capture').addEventListener('click', function() {
+			main.aframe.init();
+		}, false);
+
+		document.getElementById('stop').addEventListener('click', function() {
+			main.aframe.remove();
+		}, false);
+
+		</script>
+	</body>
+</html>
