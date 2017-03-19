@@ -2,26 +2,23 @@
 	<head>
 		<title>My first aframe app</title>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-		<script src="annyang.js"></script>
+		<!--<script src="annyang.js"></script>-->
 		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
-		<script src="aframe_speech.js"></script>
-		<script>
-		function test (e) {
-			alert(e);
-		}
-		</script>
+		<!--<script src="aframe_speech.js"></script>-->
+
 	</head>
 	<body >
 		<nav class="navbar navbar-default">
 
 			<ul style="margin-left:10px;" class="nav navbar-nav">
-				<li><button id="capture" class="btn btn-primary">Demarrer la capture</button></li>
-				<li>&nbsp;&nbsp;&nbsp;</li>
-				<li id="result"></li>
-				<li>&nbsp;&nbsp;&nbsp;</li>
-				<li><button id="stop" class="btn btn-primary">Scanner QR code</button></li>
+				<li style="padding-top:7px;"><img alt="" height=30 src="logo.png">&nbsp;&nbsp;&nbsp;</li>
+				<li style="padding-top:7px;"><button id="capture" class="btn btn-primary">Demarrer la capture</button></li>
+				<li style="padding-top:7px;">&nbsp;&nbsp;&nbsp;</li>
+				<li style="padding-top:7px;" id="result"></li>
+				<li style="padding-top:7px;">&nbsp;&nbsp;&nbsp;</li>
+				<li style="padding-top:7px;"><button id="stop" class="btn btn-primary">Scanner QR code</button></li>
 			</ul>
-			<div id="easteregg" style="z-index:10;display:none;"><img alt="" src="tinder_2.png"></div>
+			<div id="easteregg" style="z-index:10;display:none;"><img alt="" width=200 height=200 src="tinder_2.png"></div>
 		</nav>
 		<div class="container">
 			<a-scene id="main" >
@@ -43,8 +40,8 @@
 
 			    	</a-entity>
 			  	</a-entity>
-				<a-entity id="annyang" annyang-speech-recognition></a-entity>
-				<a-entity speech-command__hello="command: hello; type: function; function: test;"></a-entity>
+				<!--<a-entity id="annyang" annyang-speech-recognition></a-entity>-->
+				<!--<a-entity speech-command__hello="command: hello; type: function; function: test;"></a-entity>-->
 			</a-scene>
 		</div>
 		<script>
