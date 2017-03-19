@@ -8,6 +8,7 @@
 
 	</head>
 	<body >
+		<img id="loader" src="loader.gif" style="display:block;width:100%;height:100%;position:absolute;z-index:10">
 		<nav class="navbar navbar-default">
 
 			<ul style="margin-left:10px;" class="nav navbar-nav">
@@ -20,7 +21,7 @@
 			</ul>
 			<div id="easteregg" style="z-index:10;display:none;"><img alt="" width=200 height=200 src="tinder_2.png"></div>
 		</nav>
-		<div class="container">
+		<div style="margin-left:-8px;" class="container">
 			<a-scene id="main" >
 			<a-assets>
 		           <a-asset-item id="moore-obj" src="20170318_OBJ - Salle 1/2a9bd41bcb044fea843f4d506714db6e/2a9bd41bcb044fea843f4d506714db6e.obj"></a-asset-item>
@@ -52,6 +53,9 @@
 		AFRAME.registerComponent('cursor-listener', {
 		  init: function () {
 				main.view = this.el;
+		  },
+		  play: function () {
+			  document.getElementById('loader').style.display = "none";
 		  }
 		});
 
